@@ -1,0 +1,51 @@
+{% extends 'index.html' %}
+{% block contenido %}
+  {% load static %}
+  <div class="container-fluid pt-3 px-2">
+    <div class="alert bg-secondary rounded">
+      <h2 class="text-center text-white fw-bold">Lista de clientes</h2>
+    </div>
+    <div class="row vh-100 bg-secondary rounded align-items-start justify-content-center mx-0">
+      <div class="col-md-10">
+        <!-- Botón agregar cliente -->
+        <div class="d-flex justify-content-end my-3">
+          <a href="{% url 'nuevo_cliente' %}" class="btn btn-outline-danger m-2"><i class="fa fa-plus-circle me-1"></i> Agregar Nuevo Cliente</a>
+        </div>
+
+        <!-- Tabla de clientes -->
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <h5 class="card-title">Lista de clientes</h5>
+            <div class="table-responsive">
+              <table id="tb_tabla" class="table table-striped align-middle">
+                <thead class="table-dark">
+                  <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Estado</th>
+                    <th class="text-center">Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for cliente in clientes %}
+                    <tr>
+                      <td>{{ cliente.id }}</td>
+                      <td>{{ cliente.nombre }}</td>
+                      <td>{{ cliente.apellido }}</td>
+                      <td>{{ cliente.estado }}</td>
+                      <td class="text-center">
+                        <a href="{% url 'editar_cliente' cliente.id %}" class="btn btn-warning btn-sm"><i class="fa-solid fa-pen-to-square"></i> Editar</a>
+                        <a href="javascript:void(0)" onclick="eliminarReceta('/eliminarReceta/{{ cliente.id }}');" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i> Eliminar</a>
+                      </td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

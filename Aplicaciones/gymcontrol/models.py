@@ -10,10 +10,10 @@ class Cliente(models.Model):
     telefono = models.CharField(max_length=100, blank=True, unique=True, null=True)
     direccion = models.CharField(max_length=100, blank=True, null=True)
     fecha_nacimiento = models.DateField(blank=True, null=True)
-    estado = models.CharField(max_length=100)
     fecha_registro = models.DateTimeField(auto_now_add=True)
     fecha_modificacion = models.DateTimeField(auto_now=True)
-
+    foto= models.ImageField(upload_to='clientes/', blank=True, null=True)
+    
     def __str__(self):
         return f"{self.nombre} , {self.apellido}"
     

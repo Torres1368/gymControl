@@ -1,0 +1,63 @@
+ /* Card general */
+ .card {
+    background-color: rgb(20, 20, 20) !important;
+    border-radius: 12px !important;
+  }
+  
+  .card-title {
+    color: #ca3333 !important;
+  }
+  
+  /* Tabla general */
+  table.table {
+    background-color: rgb(20, 20, 20) !important;
+    border: 1px solid #dee2e6 !important;
+    border-radius: 8px !important;
+  }
+  
+  /* Encabezado de tabla */
+  table thead.table-dark {
+    background-color: #1e293b !important;
+    color: #ffffff !important;
+  }
+  
+  /* Celdas de la tabla */
+  
+  table td {
+    padding: 12px 16px !important;
+    text-align: left !important;
+    color: rgb(255, 255, 255) !important;
+    vertical-align: middle !important;
+  }
+  
+  table tr {
+
+    color: #ffffff !important;
+  }
+
+  /* Hover fila */
+  table tbody tr:hover {
+    background-color: rgb(187, 45, 81) !important;
+  }
+  
+  /* Botón editar */
+  .btn-warning {
+    background-color: #facc15 !important;
+    border: none !important;
+    color: #1f2937 !important;
+  }
+  
+  .btn-warning:hover {
+    background-color: #eab308 !important;
+    color: #fff !important;
+  }
+  
+  /* Botón eliminar */
+  .btn-danger {
+    background-color: #ef4444 !important;
+    border: none !important;
+  }
+  
+  .btn-danger:hover {
+    background-color: #dc2626 !important;
+  }
