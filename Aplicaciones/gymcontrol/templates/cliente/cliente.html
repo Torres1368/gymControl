@@ -1,11 +1,12 @@
 {% extends 'index.html' %}
 {% block contenido %}
   {% load static %}
+
   <div class="container-fluid pt-3 px-2">
     <div class="alert bg-secondary rounded">
       <h2 class="text-center text-white fw-bold">Lista de clientes</h2>
     </div>
-    <div class="row vh-100 bg-secondary rounded align-items-start justify-content-center mx-0">
+    <div class="row bg-secondary rounded align-items-start justify-content-center mx-0 py-3 pb-5">
       <div class="col-md-10">
         <!-- Botón agregar cliente -->
         <div class="d-flex justify-content-end my-3">
@@ -17,13 +18,14 @@
           <div class="card-body">
             <h5 class="card-title">Lista de clientes</h5>
             <div class="table-responsive">
-              <table id="tb_tabla" class="table table-striped align-middle">
+              <table class="table table-striped align-middle" id="tbl_tabla">
                 <thead class="table-dark">
                   <tr>
                     <th>ID</th>
                     <th>Nombre</th>
                     <th>Apellido</th>
-                    <th>Estado</th>
+                    <th>Genero</th>
+                    <th>Foto</th>
                     <th class="text-center">Acciones</th>
                   </tr>
                 </thead>
@@ -33,10 +35,17 @@
                       <td>{{ cliente.id }}</td>
                       <td>{{ cliente.nombre }}</td>
                       <td>{{ cliente.apellido }}</td>
-                      <td>{{ cliente.estado }}</td>
+                      <td>{{ cliente.genero }}</td>
+                      <td>
+                        {% if cliente.foto %}
+                          <img src="{{ cliente.foto.url }}" alt="{{ cliente.foto }}" width="70px" />
+                        {% else %}
+                          Sin foto
+                        {% endif %}
+                      </td>
                       <td class="text-center">
                         <a href="{% url 'editar_cliente' cliente.id %}" class="btn btn-warning btn-sm"><i class="fa-solid fa-pen-to-square"></i> Editar</a>
-                        <a href="javascript:void(0)" onclick="eliminarReceta('/eliminarReceta/{{ cliente.id }}');" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i> Eliminar</a>
+                        <a href="javascript:void(0)" onclick="eliminarCliente('/eliminar_cliente/{{ cliente.id }}');" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i> Eliminar</a>
                       </td>
                     </tr>
                   {% endfor %}
@@ -48,4 +57,6 @@
       </div>
     </div>
   </div>
+
+  <script></script>
 {% endblock %}

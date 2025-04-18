@@ -22,8 +22,9 @@ def guardar_cliente(request):
         genero= request.POST["genero"]
         email=request.POST["email"]
         direccion=request.POST["direccion"]
-        fecha_nacimiento=request.POST["fecha_nacimiento"]
+        fecha_nacimiento=request.POST.get("fecha_nacimiento") or None
         foto=request.FILES.get("foto")
+                
         cliente=Cliente.objects.create(nombre=nombre,apellido=apellido,genero=genero,
                                        telefono=telefono,email=email,direccion=direccion,
                                        fecha_nacimiento=fecha_nacimiento,foto=foto)
@@ -34,3 +35,34 @@ def guardar_cliente(request):
 def editar_cliente(request, id):
     cliente=Cliente.objects.get(id=id)
     return render(request, 'cliente/editar_cliente.html', {'cliente': cliente})
+
+def procesarinformacionCliente(request):
+    id=request.POST["id"]
+    nombre=request.POST["nombre"]
+    apellido=request.POST["apellido"]
+    telefono=request.POST["telefono"]
+    genero= request.POST["genero"]
+    email=request.POST["email"]
+    direccion=request.POST["direccion"]
+    fecha_nacimiento=request.POST.get("fecha_nacimiento") or None
+    nueva_foto=request.FILES.get("nueva_foto")
+    clienteEditar=Cliente.objects.get(id=id)
+    clienteEditar.nombre=nombre
+    clienteEditar.apellido=apellido
+    clienteEditar.telefono=telefono
+    clienteEditar.genero=genero
+    clienteEditar.email=email
+    clienteEditar.direccion=direccion
+    clienteEditar.fecha_nacimiento=fecha_nacimiento
+    clienteEditar.foto=nueva_foto
+    clienteEditar.save()
+    messages.success(request, 'Los datos del cliente se han actualizado')    
+    return redirect('/clientes')
+
+
+
+def eliminar_cliente(request,id):
+    clienteEliminar=Cliente.objects.get(id=id)
+    clienteEliminar.delete()
+    messages.success(request, 'Cliente eliminado exitosamente')
+    return redirect('/clientes')
