@@ -2,6 +2,8 @@ from django.contrib import messages
 from django.shortcuts import redirect, render
 from .models import *
 from django.contrib.auth import authenticate, login
+from django.contrib.auth import logout
+from django.contrib.auth.decorators import login_required
 # Create your views here.
 def user_login(request):
     if request.method == 'POST':
@@ -29,6 +31,31 @@ def user_login(request):
         
 
     return render(request, 'registration/login.html')
+
+def salir(request):
+    logout(request)
+    return redirect('/')
+
+    
+#Informacion del usuario
+@login_required
+def perfil_usuario(request):
+    user = request.user
+
+    # Obtener o crear el perfil si no existe
+    profile, created = Profile.objects.get_or_create(user=user)
+
+    if request.method == 'POST':
+        if 'imagen' in request.FILES:
+            profile.imagen = request.FILES['imagen']
+            profile.save()
+            messages.success(request, 'Foto de perfil actualizada correctamente.')
+            return redirect('perfil_usuario')  # Asegúrate que este sea tu URL name
+
+    return render(request, 'perfil/perfil.html', {
+        'user': user,
+        'profile': profile
+    })
 
 def index(request):
     return render(request,'index.html')
