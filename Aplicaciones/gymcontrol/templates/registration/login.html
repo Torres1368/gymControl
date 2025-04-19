@@ -1,0 +1,50 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>IRON GYM | LOGIN</title>
+    <!-- link css file -->
+    <link rel="stylesheet" href="{% static 'css/login.css' %}" />
+    <!-- sweet alert -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  </head>
+  <body>
+    <div class="wrapper">
+      <div class="left">
+        <center>
+          <img class="logo" src="{% static 'img/login/logo.png' %}" alt="LOGO" />
+        </center>
+        <h2 class="welcome_text">Iniciar Sesión</h2>
+
+        <form method="POST" class="form">
+          {% csrf_token %}
+          <h2 class="inp_name">Usuario*</h2>
+          <input class="input" name="username" type="text" placeholder="Enter your email" required /><br />
+
+          <h2 class="inp_name">Contraseña *</h2>
+          <input class="input" name="password" type="password" placeholder="Enter your password" required /><br />
+
+          <button type="submit" class="signin_btn">Sign In</button>
+
+          {% if messages %}
+            <script>
+              Swal.fire({
+                icon: 'error',
+                title: '¡Oops!',
+                text: '{% for message in messages %}{{ message }}{% endfor %}',
+                showConfirmButton: true
+              })
+            </script>
+          {% endif %}
+        </form>
+      </div>
+
+      <div class="right">
+        <h2 class="title">SIGN IN TO<br />DASHBOARD</h2>
+      </div>
+    </div>
+  </body>
+</html>
