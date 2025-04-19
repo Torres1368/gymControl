@@ -1,0 +1,148 @@
+{% extends 'index.html' %}
+{% block contenido %}
+  {% load static %}
+  <div class="bg-secondary rounded col-11 mx-auto d-none">
+    <h2 class="text-center text-white fw-bold">Lista de clientes</h2>
+  </div>
+  <form action="/guardar_suscripcion/" method="post" enctype="multipart/form-data" id="frm_suscripcion">
+    {% csrf_token %}
+    <div class="container-fluid pt-3 px-3">
+      <div class="row g-4">
+        <div class="col-sm-12 col-xl-6">
+          <div class="bg-secondary rounded h-100 p-4">
+            <h6 class="mb-4">Agregar suscripcion</h6>
+            <div class="mb-3">
+              <label for="cliente" class="form-label">Cliente:</label>
+              <select class="form-select mb-3" name="cliente" id="cliente">
+                <option selected disabled>Seleccione el cliente</option>
+                {% for cliente in clientes %}
+                  <option value="{{ cliente.id }}">{{ cliente.nombre }} {{ cliente.apellido }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="tipo_pago" class="form-label">Tipo de pago:</label>
+              <select class="form-select mb-3" name="tipo_pago" id="tipo_pago">
+                <option selected disabled>Seleccione el tipo de pago</option>
+                {% for tipo in tiposPagos %}
+                  <option value="{{ tipo.id }}" data-precio="{{ tipo.precio }}">{{ tipo.tipo }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="pago_inicial" class="form-label">Pago Inicial:</label>
+              <div class="input-group mb-3">
+                <span class="input-group-text text-success">$</span>
+                <input type="text" class="form-control" id="pago_inicial" name="pago_inicial" placeholder="00.00" />
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="total_pagar" class="form-label">Restante a pagar:</label>
+              <div class="input-group mb-3">
+                <span class="input-group-text text-success">$</span>
+                <input type="text" class="form-control" id="total_pagar" name="total_pagar" placeholder="Total a pagar" readonly />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-sm-12 col-xl-6">
+          <div class="bg-secondary rounded h-100 p-4">
+            <h6 class="mb-4">Suscripcion*</h6>
+            <div class="mb-3">
+              <label for="estado" class="form-label">Estado del pago (Suscripción):</label>
+              <select class="form-select mb-3" name="estado" id="estado" disabled>
+                <option selected disabled>Estado...</option>
+                <option value="activa">Completado</option>
+                <option value="pendiente">Pendiente</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="fecha_inicio" class="form-label">Fecha de inicio:</label>
+              <input type="date" class="form-control bg-dark" id="fecha_inicio" name="fecha_inicio" readonly />
+            </div>
+
+            <div class="mb-3">
+              <label for="fecha_fin" class="form-label">Fecha de fin:</label>
+              <input type="date" class="form-control bg-dark" id="fecha_fin" name="fecha_fin" readonly />
+            </div>
+            <div class="text-end">
+              <button type="submit" class="btn btn-primary">Guardar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <script>
+    let precioSeleccionado = 0
+    
+    $(document).ready(function () {
+      // Configuración de Select2 para el cliente
+      $('#cliente').select2({
+        placeholder: 'Seleccione un cliente',
+        allowClear: true,
+        width: '100%'
+      })
+    
+      // Obtener el precio del tipo de pago seleccionado
+      $('#tipo_pago').on('change', function () {
+        const selectedOption = $(this).find('option:selected')
+        precioSeleccionado = parseFloat(selectedOption.data('precio')) || 0
+        calcularRestante()
+      })
+    
+      // Calcular el restante cuando se ingresa el pago inicial
+      $('#pago_inicial').on('input', function () {
+        calcularRestante()
+      })
+    
+      // Función para calcular el restante a pagar
+      function calcularRestante() {
+        const pagoInicial = parseFloat($('#pago_inicial').val()) || 0
+        const restante = precioSeleccionado - pagoInicial
+        $('#total_pagar').val(restante.toFixed(2))
+    
+        // Actualizar el estado según el restante
+        if (restante <= 0) {
+          $('#estado').val('activa') // Completado
+        } else {
+          $('#estado').val('pendiente') // Pendiente
+        }
+      }
+    
+      // Establecer fecha de inicio (hoy) y fecha de fin (un mes después)
+      const fechaInicio = $('#fecha_inicio')
+      const fechaFin = $('#fecha_fin')
+      const fechaHoy = new Date()
+    
+      // Ajustar la hora a la zona horaria de Ecuador (UTC-5)
+      const offset = 5 * 60 // UTC-5 en minutos
+      fechaHoy.setMinutes(fechaHoy.getMinutes() - fechaHoy.getTimezoneOffset() - offset)
+    
+      // Establecer la fecha de inicio como la fecha actual (ajustada)
+      const fechaInicioString = fechaHoy.toISOString().split('T')[0]
+      fechaInicio.val(fechaInicioString)
+    
+      // Establecer la fecha de fin como el mismo día del siguiente mes
+      fechaHoy.setMonth(fechaHoy.getMonth() + 1)
+      const fechaFinString = fechaHoy.toISOString().split('T')[0]
+      fechaFin.val(fechaFinString)
+    })
+  </script>
+
+  <style>
+    /* Mantener el color de fondo y el texto como el original */
+    #estado:disabled {
+      background-color: #000 !important; /* Fondo negro */
+      color: #fff !important; /* Texto blanco */
+    }
+    /* Mantener el color de fondo y el texto como el original */
+    #total_pagar:read-only {
+      background-color: #000 !important; /* Fondo negro */
+      color: #fff !important; /* Texto blanco */
+    }
+  </style>
+{% endblock %}

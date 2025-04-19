@@ -1,0 +1,58 @@
+{% extends 'index.html' %}
+{% block contenido %}
+  {% load static %}
+
+  <div class="container-fluid pt-3 px-2">
+    <div class="alert bg-secondary rounded">
+      <h2 class="text-center text-white fw-bold">Lista de suscripciones</h2>
+    </div>
+    <div class="row bg-secondary rounded align-items-start justify-content-center mx-0 py-3 pb-5">
+      <div class="col-md-12">
+        <!-- Botón agregar cliente -->
+        <div class="d-flex justify-content-end my-3">
+          <a href="{% url 'nueva_suscripcion' %}" class="btn btn-outline-danger m-2"><i class="fa fa-plus-circle me-1"></i> Agregar Nueva Suscripción</a>
+        </div>
+
+        <!-- Tabla de clientes -->
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <h5 class="card-title">Lista de suscripciones</h5>
+            <div class="table-responsive">
+              <table class="table table-striped align-middle" id="tbl_tabla">
+                <thead class="table-dark">
+                  <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Estado</th>
+                    <th>Fecha Inicio</th>
+                    <th>Fecha Final</th>
+                    <th class="text-center">Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for suscripcion in suscripciones %}
+                    <tr>
+                      <td>{{ suscripcion.id }}</td>
+                      <td>{{ suscripcion.cliente.nombre }}</td>
+                      <td>{{ suscripcion.cliente.apellido }}</td>
+                      <td>{{ suscripcion.estado }}</td>
+                      <td>{{ suscripcion.fecha_inicio }}</td>
+                      <td>{{ suscripcion.fecha_fin }}</td>
+                      <td class="text-center">
+                        <a href="" class="btn btn-warning btn-sm"><i class="fa-solid fa-pen-to-square"></i> Editar</a>
+                        <a href="javascript:void(0)" onclick="eliminarSuscripcion('/eliminar_suscripcion/{{ cliente.id }}');" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i> Eliminar</a>
+                      </td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="{% static 'js/templates/suscripcion.js' %}"></script>
+{% endblock %}

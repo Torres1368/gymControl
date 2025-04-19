@@ -7,7 +7,7 @@
       <h2 class="text-center text-white fw-bold">Lista de clientes</h2>
     </div>
     <div class="row bg-secondary rounded align-items-start justify-content-center mx-0 py-3 pb-5">
-      <div class="col-md-10">
+      <div class="col-md-12">
         <!-- Botón agregar cliente -->
         <div class="d-flex justify-content-end my-3">
           <a href="{% url 'nuevo_cliente' %}" class="btn btn-outline-danger m-2"><i class="fa fa-plus-circle me-1"></i> Agregar Nuevo Cliente</a>
@@ -58,5 +58,5 @@
     </div>
   </div>
 
-  <script></script>
+  <script src="{% static 'js/templates/cliente.js' %}"></script>
 {% endblock %}

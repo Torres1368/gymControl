@@ -66,3 +66,48 @@ def eliminar_cliente(request,id):
     clienteEliminar.delete()
     messages.success(request, 'Cliente eliminado exitosamente')
     return redirect('/clientes')
+
+def suscripciones(request):
+    clientes=Cliente.objects.all()
+    suscripciones = Suscripcion.objects.all()
+    return render(request,'suscripcion/suscripcion.html',{'clientes':clientes ,'suscripciones':suscripciones, 'navbar': 'suscripciones'})
+
+def nueva_suscripcion(request):
+    clientes=Cliente.objects.all()
+    tiposPagos=TipoPago.objects.all()
+    return render(request,'suscripcion/nueva_suscripcion.html',{'clientes':clientes, 'tiposPagos':tiposPagos})
+
+
+def guardar_suscripcion(request):
+    if request.method == 'POST':
+        nombre=request.POST["nombre"]
+        apellido=request.POST["apellido"]
+        telefono=request.POST["telefono"]
+        genero= request.POST["genero"]
+        email=request.POST["email"]
+        direccion=request.POST["direccion"]
+        fecha_nacimiento=request.POST.get("fecha_nacimiento") or None
+        foto=request.FILES.get("foto")
+                
+        cliente=Cliente.objects.create(nombre=nombre,apellido=apellido,genero=genero,
+                                       telefono=telefono,email=email,direccion=direccion,
+                                       fecha_nacimiento=fecha_nacimiento,foto=foto)
+    
+        messages.success(request, 'Cliente guardado exitosamente')
+        return redirect('/clientes')
+
+def editar_suscripcion(request, id):
+    suscripciones=Suscripcion.objects.get(id=id)
+    return render(request, 'suscripcion-/editar_suscripcion.html', {'suscripciones': suscripciones})
+
+def procesarinformacionSuscripcion(request):
+    return redirect('/clientes')
+
+
+
+def eliminar_suscripcion(request,id):
+    suscripcionEliminar=Suscripcion.objects.get(id=id)
+    suscripcionEliminar.delete()
+    messages.success(request, 'Cliente eliminado exitosamente')
+    return redirect('/suscripciones')
+
