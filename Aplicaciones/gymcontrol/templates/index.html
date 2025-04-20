@@ -86,7 +86,7 @@
             {% else %}
             <img src="{% static 'img/usuario/usuario.png' %}" alt="" class="rounded-circle" style="width: 40px; height: 40px;" />
           {% endif %}
-            <div class="bg-success rounded-circle border border-2 border-white position-absolute end-0 bottom-0 p-1"></div>
+            <div class="bg-success rounded-circle border-2 border-white position-absolute end-0 bottom-0 p-1"></div>
           </div>
           <div class="ms-3">
             <h6 class="mb-0">{{ user.username }}</h6>
@@ -113,7 +113,7 @@
         <a href="#" class="sidebar-toggler flex-shrink-0"><i class="fa fa-bars"></i></a>
 
         <div class="navbar-nav align-items-center ms-auto">
-          <div class="nav-item dropdown">
+          <div class="nav-item dropdown d-none">
             <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
               <i class="fa fa-envelope me-lg-2"></i>
               <span class="d-none d-lg-inline-flex">Message</span>
@@ -181,7 +181,7 @@
               {% if user.profile.imagen %}
 
               <img class="rounded-circle me-lg-2" src="{{ user.profile.imagen.url }}" alt="" style="width: 40px; height: 40px;" />
-              <span class="d-none d-lg-inline-flex">John Doe</span>
+              <span class="d-none d-lg-inline-flex">{{ user.username }}</span>
               {% else %}
               <img src="{% static 'img/usuario/usuario.png' %}" alt=""  class="rounded-circle me-lg-2" style="width: 40px; height: 40px;" />
               {% endif %}
@@ -246,7 +246,7 @@
                       <div class="col-12 col-sm-6 text-center text-sm-start">
                           &copy; <a href="#">IronGym</a>, All Right Reserved. 
                       </div>
-                      <div class="col-12 col-sm-6 text-center text-sm-end">
+                      <div class="col-12 col-sm-6 text-center text-sm-end d-none">
                           <!--/*** This template is free as long as you keep the footer author’s credit link/attribution link/backlink. If you'd like to use the template without the footer author’s credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". Thank you for your support. ***/-->
                           Designed By <a href="#">HTML Codex</a>
                           <br>Distributed By: <a href="#" target="_blank">ThemeWagon</a>

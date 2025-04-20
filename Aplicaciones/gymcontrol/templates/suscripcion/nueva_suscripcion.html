@@ -81,29 +81,6 @@
     </div>
   </form>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      const inputInicial = document.getElementById('pago_inicial')
-      const inputTotal = document.getElementById('total_pagar')
-    
-      if (inputInicial && inputTotal) {
-        inputInicial.addEventListener('input', function () {
-          const total = parseFloat(inputTotal.value) || 0
-          const inicial = parseFloat(this.value) || 0
-    
-          if (inicial > total) {
-            iziToast.error({
-              title: 'Error',
-              message: 'El pago inicial no puede ser mayor al total a pagar.',
-              position: 'topRight'
-            })
-            this.value = ''
-          }
-        })
-      }
-    })
-  </script>
-
   <!-- enlace a mi script -->
   <script src="{% static 'js/templates/nueva_suscripcion.js' %}"></script>
 
