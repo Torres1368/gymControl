@@ -1,6 +1,7 @@
 from django.contrib import messages
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 from .models import *
+from decimal import Decimal
 from django.contrib.auth import authenticate, login
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
@@ -137,15 +138,23 @@ def guardar_suscripcion(request):
         tipo_pago_id = request.POST["tipo_pago"]
         fecha_inicio = request.POST.get("fecha_inicio")
         fecha_fin = request.POST.get("fecha_fin")
-        pago_inicial = request.POST["pago_inicial"]
-        total_pagar = request.POST["total_pagar"]
-        estado=request.POST["estado"]
+        pago_inicial = request.POST["pago_inicial"].replace(",", ".")
+        total_pagar = request.POST["total_pagar"].replace(",", ".")
+        estado = request.POST["estado"]
         
-        cliente=Cliente.objects.get(id=cliente_id)
-        tipo_pago=TipoPago.objects.get(id=tipo_pago_id)
-        suscripcion=Suscripcion.objects.create(cliente=cliente,tipo_pago=tipo_pago,fecha_inicio=fecha_inicio,fecha_fin=fecha_fin,pago_inicial=pago_inicial,total_pagar=total_pagar,estado=estado)
+        cliente = Cliente.objects.get(id=cliente_id)
+        tipo_pago = TipoPago.objects.get(id=tipo_pago_id)
+        suscripcion = Suscripcion.objects.create(
+            cliente=cliente,
+            tipo_pago=tipo_pago,
+            fecha_inicio=fecha_inicio,
+            fecha_fin=fecha_fin,
+            pago_inicial=pago_inicial,
+            total_pagar=total_pagar,
+            estado=estado
+        )
         messages.success(request, 'Suscripcion guardada exitosamente')
-        return redirect('/suscripciones')
+        return redirect('/suscripciones') 
     
 
 def editar_suscripcion(request, id):
@@ -173,3 +182,48 @@ def eliminar_suscripcion(request,id):
     messages.success(request, 'Cliente eliminado exitosamente')
     return redirect('/suscripciones')
 
+
+
+
+def registrar_abono(request, suscripcion_id):
+    # Obtén la suscripción correspondiente
+    suscripcion = Suscripcion.objects.get(id=suscripcion_id)
+    
+    # Obtén el monto abonado y la fecha del formulario
+    monto_abonado = request.POST.get('monto_abonado').replace(",", ".")
+    fecha_abono = request.POST.get('fecha')
+    
+    # Convertir el monto abonado a decimal
+    monto_abonado = Decimal(monto_abonado)
+    
+    # Registrar el abono en la base de datos
+    abono = Abono(
+        Suscripcion=suscripcion,
+        monto_abonado=monto_abonado,
+        fecha=fecha_abono
+    )
+    abono.save()
+
+    # Actualizar el total a pagar en la suscripción
+    suscripcion.total_pagar -= monto_abonado  # Ya ambos son Decimal
+
+    # Verificar si el total a pagar es 0 o menor y actualizar el estado
+    if suscripcion.total_pagar <= 0:
+        suscripcion.estado = 'activa'
+    else:
+        suscripcion.estado = 'pendiente'
+
+    # Guardar los cambios en la suscripción
+    suscripcion.full_clean() # Llamar al método clean para validar los campos del choice estado
+    suscripcion.save()
+
+    # Redirigir o devolver una respuesta
+    messages.success(request, 'El abono ha sido registrado exitosamente')    
+    return redirect('/suscripciones')  # Puedes redirigir a cualquier vista que necesites 
+
+def abonos(request):
+    abonos = Abono.objects.select_related('Suscripcion__cliente').all()
+    return render(request, 'abono/abono.html', {
+        'abonos': abonos,
+        'navbar': 'suscripciones'
+    })

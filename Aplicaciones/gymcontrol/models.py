@@ -57,7 +57,7 @@ class Suscripcion(models.Model):
 
 class Abono(models.Model):
     id = models.AutoField(primary_key=True)
-    Suscripcion = models.ForeignKey(Suscripcion, on_delete=models.CASCADE)
+    suscripcion = models.ForeignKey(Suscripcion, on_delete=models.CASCADE)
     monto_abonado = models.DecimalField(max_digits=10, decimal_places=2)
     fecha = models.DateField()
     fecha_registro = models.DateTimeField(auto_now_add=True)
@@ -66,3 +66,6 @@ class Abono(models.Model):
     def __str__(self):
         return self.Suscripcion.cliente.nombre , self.Suscripcion.cliente.apellido, self.fecha
     
+
+
+

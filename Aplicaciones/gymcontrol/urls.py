@@ -18,6 +18,9 @@ urlpatterns = [
     path('editar_suscripcion/<id>', views.editar_suscripcion, name='editar_suscripcion'),
     path('procesarinformacionSuscripcion/', views.procesarinformacionSuscripcion),
     path('eliminar_suscripcion/<id>', views.eliminar_suscripcion, name='eliminar_suscripcion'),
+    
+    path('registrar_abono/<int:suscripcion_id>/', views.registrar_abono, name='registrar_abono'),
+    path('abonos/', views.abonos, name='abonos'),
 
 
 ]

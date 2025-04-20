@@ -54,7 +54,7 @@
             <h6 class="mb-4">Suscripcion*</h6>
             <div class="mb-3">
               <label for="estado" class="form-label">Estado del pago (Suscripción):</label>
-              <select class="form-select mb-3" name="estado" id="estado" aria-readonly="true">
+              <select class="form-select mb-3 no-click" name="estado" id="estado">
                 <option selected disabled>Estado...</option>
                 <option value="activa">Completado</option>
                 <option value="pendiente">Pendiente</option>
@@ -80,4 +80,10 @@
 
   <!-- enlace a mi script -->
   <script src="{% static 'js/templates/nueva_suscripcion.js' %}"></script>
+
+  <style>
+    .no-click {
+      pointer-events: none;
+    }
+  </style>
 {% endblock %}

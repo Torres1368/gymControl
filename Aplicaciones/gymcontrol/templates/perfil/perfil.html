@@ -15,7 +15,7 @@
           {% if profile and profile.imagen %}
             <img src="{{ profile.imagen.url }}" class="profile-img mb-3" alt="Imagen de perfil" id="profileImage" />
           {% else %}
-            <img src="{% static 'assets/img/usuario.png' %}" class="profile-img mb-3" alt="Sin imagen" id="profileImage" />
+            <img src="{% static 'img/usuario/usuario.png' %}" class="profile-img mb-3" alt="Sin imagen" id="profileImage" />
           {% endif %}
 
           <!-- Botón para elegir imagen -->
@@ -25,17 +25,17 @@
 
         <!-- Botón para guardar solo si se cambia la imagen -->
         <div id="saveBtnWrapper" class="mt-3" style="display: none;">
-          <button type="submit" class="btn btn-success">Guardar imagen</button>
+          <button type="submit" class="btn btn-primary">Guardar imagen</button>
         </div>
       </form>
 
       <h4 class="card-title">{{ user.first_name }} {{ user.last_name }}</h4>
-      <p class="card-text">
-        <strong>Usuario:</strong> {{ user.username }}<br />
-        <strong>Correo:</strong> {{ user.email }}
+      <p class="card-text text-danger">
+        <strong class="text-primary">Usuario:</strong> {{ user.username }}<br />
+        <strong class="text-primary">Correo:</strong> {{ user.email }}
       </p>
 
-      <a href="{% url 'index' %}" class="btn btn-primary mt-3">Volver al inicio</a>
+      <a href="{% url 'index' %}" class="btn btn-outline-primary mt-3">Volver al inicio</a>
     </div>
   </div>
 

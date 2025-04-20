@@ -29,7 +29,7 @@
     color: rgb(255, 255, 255) !important;
     vertical-align: middle !important;
   }
-  
+
   table tr {
 
     color: #ffffff !important;
@@ -62,6 +62,11 @@
     background-color: #dc2626 !important;
   }
 
+    
+  /* Botón del calendario */
+  input[type='date']::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+  }
 
 
   

@@ -1,0 +1,57 @@
+{% extends 'index.html' %}
+{% block contenido %}
+  {% load static %}
+
+  <div class="container-fluid pt-3 px-2">
+    <div class="alert bg-secondary rounded">
+      <h2 class="text-center text-white fw-bold">Lista de abonos</h2>
+    </div>
+    <div class="row bg-secondary rounded align-items-start justify-content-center mx-0 py-3 pb-5">
+      <div class="col-md-12">
+        <!-- Botón -->
+        <div class="d-flex justify-content-end my-3 d-none">
+          <a href="#" class="btn btn-outline-danger m-2"><i class="fa fa-plus-circle me-1"></i> Agregar</a>
+        </div>
+
+        <!-- Tabla de abono -->
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <h5 class="card-title">Lista de abonos</h5>
+            <div class="table-responsive">
+              <table class="table table-striped align-middle" id="tbl_tabla">
+                <thead class="table-dark">
+                  <tr class="text-center">
+                    <th>ID</th>
+                    <th>Cliente</th>
+                    <th>Monto</th>
+                    <th>Estado</th>
+                    <th>Fecha registro</th>
+                    <th class="text-center">Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for abono in abonos %}
+                    <tr class="text-center">
+                      <td>{{ abono.id }}</td>
+                      <td>{{ abono.Suscripcion.cliente.nombre }} {{ abono.Suscripcion.cliente.nombre }}</td>
+                      <td>{{ abono.monto_abonado }}</td>
+                      <td>{{ abono.Suscripcion.estado }}</td>
+                      <td>{{ abono.fecha }}</td>
+
+                      <td class="text-center">
+                        <a href="" class="btn btn-warning btn-sm"><i class="fa-solid fa-pen-to-square"></i> Editar</a>
+                        <a href="javascript:void(0)" onclick="eliminarCliente('/eliminar_cliente/{{ cliente.id }}');" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i> Eliminar</a>
+                      </td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="{% static 'js/templates/cliente.js' %}"></script>
+{% endblock %}
