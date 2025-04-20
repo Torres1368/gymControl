@@ -2,8 +2,9 @@
 {% block contenido %}
   {% load static %}
   <link href="{% static 'css/frm_nueva_suscripcion.css' %}" rel="stylesheet" />
-
+  <!-- Archivo de mi jquery validate form -->
   <div class="bg-secondary rounded col-11 mx-auto d-none">
+    <script src="{% static 'js/templates/validate_suscripcion.js' %}"></script>
     <h2 class="text-center text-white fw-bold">Lista de clientes</h2>
   </div>
   <form action="/guardar_suscripcion/" method="post" enctype="multipart/form-data" id="frm_suscripcion">

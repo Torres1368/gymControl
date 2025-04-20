@@ -68,5 +68,14 @@
     filter: invert(1);
   }
 
+  /* Estilo de los errores de jquery validate  */
+label.error {
+  color: #EB1616;            /* Cambia a tu color favorito */
+  font-size: 14px;       /* Ajusta el tamaño */
+  font-weight: bold;     /* Opcional: lo pone en negrita */
+  margin-top: 5px;       /* Espaciado opcional */
+}
+
+
 
   

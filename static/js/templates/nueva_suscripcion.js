@@ -53,3 +53,4 @@ $(document).ready(function () {
   const fechaFinString = fechaHoy.toISOString().split('T')[0]
   fechaFin.val(fechaFinString)
 })
+
