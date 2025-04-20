@@ -1,4 +1,3 @@
-// formulario.js
 let precioSeleccionado = 0
 
 $(document).ready(function () {
@@ -18,6 +17,21 @@ $(document).ready(function () {
 
   // Calcular el restante cuando se ingresa el pago inicial
   $('#pago_inicial').on('input', function () {
+    const pagoInicial = parseFloat($(this).val()) || 0
+    const total = precioSeleccionado
+
+    if (pagoInicial > total) {
+      iziToast.error({
+        title: 'Error',
+        message: 'El pago inicial no puede ser mayor al total a pagar.',
+        position: 'topRight'
+      })
+      $(this).val('')
+      $('#total_pagar').val(total.toFixed(2))
+      $('#estado').val('pendiente')
+      return
+    }
+
     calcularRestante()
   })
 
@@ -53,4 +67,3 @@ $(document).ready(function () {
   const fechaFinString = fechaHoy.toISOString().split('T')[0]
   fechaFin.val(fechaFinString)
 })
-

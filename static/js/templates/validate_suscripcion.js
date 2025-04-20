@@ -13,9 +13,8 @@ $(document).ready(function() {
             },
             "pago_inicial": {
                 required: true,
-                minlength: 3,
-                maxlength: 30,
-                digits: true
+                number: true,
+                min:0.01,
             }
         },
         messages: {
@@ -24,7 +23,8 @@ $(document).ready(function() {
             },
             "pago_inicial": {
                 required: "Debe ingresar el pago inicial",
-                digits: "Solo se permiten valores numéricos"
+                number: "Solo se permiten valores numéricos",
+                min:"El valor debe ser mayor de $0",
             },
             "tipo_pago": {
                 required: "Selecciona el tipo de pago"
