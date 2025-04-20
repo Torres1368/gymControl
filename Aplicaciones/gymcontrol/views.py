@@ -198,7 +198,7 @@ def registrar_abono(request, suscripcion_id):
     
     # Registrar el abono en la base de datos
     abono = Abono(
-        Suscripcion=suscripcion,
+        suscripcion=suscripcion,
         monto_abonado=monto_abonado,
         fecha=fecha_abono
     )
