@@ -222,8 +222,25 @@ def registrar_abono(request, suscripcion_id):
     return redirect('/suscripciones')  # Puedes redirigir a cualquier vista que necesites 
 
 def abonos(request):
-    abonos = Abono.objects.select_related('Suscripcion__cliente').all()
+    abonos = Abono.objects.select_related('suscripcion').all()
     return render(request, 'abono/abono.html', {
         'abonos': abonos,
-        'navbar': 'suscripciones'
+        'navbar': 'abonos'
     })
+    
+def eliminar_abono(request, abono_id):
+    abono = get_object_or_404(Abono, id=abono_id)
+    suscripcion = abono.suscripcion
+
+    # Sumar el abono eliminado al total_pagar
+    suscripcion.total_pagar += abono.monto_abonado
+
+    # Cambiar el estado si queda saldo pendiente
+    if suscripcion.total_pagar > 0:
+        suscripcion.estado = 'pendiente'
+
+    suscripcion.save()
+    abono.delete()
+
+    messages.success(request, 'Abono eliminado exitosamente')
+    return redirect('/abonos')  # Cambia esta ruta si tu vista o template es diferente

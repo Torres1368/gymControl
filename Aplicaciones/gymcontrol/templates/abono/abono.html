@@ -33,14 +33,14 @@
                   {% for abono in abonos %}
                     <tr class="text-center">
                       <td>{{ abono.id }}</td>
-                      <td>{{ abono.Suscripcion.cliente.nombre }} {{ abono.Suscripcion.cliente.nombre }}</td>
+                      <td>{{ abono.suscripcion.cliente.nombre }} {{ abono.suscripcion.cliente.nombre }}</td>
                       <td>{{ abono.monto_abonado }}</td>
-                      <td>{{ abono.Suscripcion.estado }}</td>
+                      <td>{{ abono.suscripcion.estado }}</td>
                       <td>{{ abono.fecha }}</td>
 
                       <td class="text-center">
                         <a href="" class="btn btn-warning btn-sm"><i class="fa-solid fa-pen-to-square"></i> Editar</a>
-                        <a href="javascript:void(0)" onclick="eliminarCliente('/eliminar_cliente/{{ cliente.id }}');" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i> Eliminar</a>
+                        <a href="javascript:void(0)" onclick="eliminarAbono('/eliminar_abono/{{ abono.id }}');" title="Eliminar registro" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i>Eliminar</a>
                       </td>
                     </tr>
                   {% endfor %}
@@ -53,5 +53,5 @@
     </div>
   </div>
 
-  <script src="{% static 'js/templates/cliente.js' %}"></script>
+  <script src="{% static 'js/templates/abono.js' %}"></script>
 {% endblock %}

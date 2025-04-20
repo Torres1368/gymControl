@@ -64,8 +64,7 @@ class Abono(models.Model):
     fecha_modificacion = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.Suscripcion.cliente.nombre , self.Suscripcion.cliente.apellido, self.fecha
-    
+        return f"{self.suscripcion.cliente.nombre} {self.suscripcion.cliente.apellido} - {self.fecha}"
 
 
 

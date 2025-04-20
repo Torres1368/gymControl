@@ -21,6 +21,7 @@ urlpatterns = [
     
     path('registrar_abono/<int:suscripcion_id>/', views.registrar_abono, name='registrar_abono'),
     path('abonos/', views.abonos, name='abonos'),
+    path('eliminar_abono/<int:abono_id>/', views.eliminar_abono, name='eliminar_abono'),
 
 
 ]
