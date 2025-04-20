@@ -1,48 +1,58 @@
 $(document).ready(function() {
+    // Inicializa Select2 en los select
+    $('#cliente, #tipo_pago').select2();
+
+    // Valida el formulario
     $("#frm_suscripcion").validate({
         rules: {
-  
             "cliente": {
+                required: true 
+            },
+            "tipo_pago": {
+                required: true 
+            },
+            "pago_inicial": {
                 required: true,
                 minlength: 3,
                 maxlength: 30,
-                lettersonly: true
-                
-            },
-            "apellido": {
-                required: true,
-                minlength: 3,
-                maxlength: 30,
-                lettersonly: true
-  
-            },
-            "genero": {
-                required: true,  
+                digits: true
             }
         },
         messages: {
-  
-            "nombre": {
-                required: "Debe ingresar el nombre del cliente",
-                minlength: "Debe ingresar 3 o más caracteres",
-                maxlength: "solo se permite hasta 30 caracteres",
-                lettersonly: "Solo se permiten letras"
-  
-  
+            "cliente": {
+                required: "Seleccione al cliente"
             },
-            "apellido": {
-                required: "Debe ingresar el apellido del cliente",
-                minlength: "Debe ingresar 3 o más caracteres",
-                maxlength: "solo se permite hasta 30 caracteres",
-                lettersonly: "Solo se permiten letras"
-  
+            "pago_inicial": {
+                required: "Debe ingresar el pago inicial",
+                digits: "Solo se permiten valores numéricos"
             },
-  
-            "genero": {
-                required: "Seleccione el género del cliente"
-  
+            "tipo_pago": {
+                required: "Selecciona el tipo de pago"
             }
+        },
+        errorPlacement: function(error, element) {
+            if (element.hasClass('select2-hidden-accessible')) {
+                error.addClass("invalid-feedback");
+                error.insertAfter(element.next('.select2'));
+            }
+            else if (element.parent().hasClass('input-group')) {
+                error.addClass("invalid-feedback");
+                error.insertAfter(element.parent());
+            } else {
+                error.addClass("invalid-feedback");
+                error.insertAfter(element);
+            }
+        },
+        highlight: function(element) {
+            $(element).addClass("is-invalid");
+        },
+        unhighlight: function(element) {
+            $(element).removeClass("is-invalid");
         }
     });
-  });
-  
+
+    // 🔥 Este es el fix para Select2
+    $('#cliente, #tipo_pago').on('change.select2', function() {
+        $(this).valid();
+    });
+});

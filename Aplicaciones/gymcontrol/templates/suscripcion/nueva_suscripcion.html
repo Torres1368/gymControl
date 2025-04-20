@@ -14,15 +14,17 @@
         <div class="col-sm-12 col-xl-6">
           <div class="bg-secondary rounded h-100 p-4">
             <h6 class="mb-4">Agregar suscripcion</h6>
+
             <div class="mb-3">
               <label for="cliente" class="form-label">Cliente:</label>
-              <select class="form-select mb-3" name="cliente" id="cliente">
-                <option selected disabled>Seleccione el cliente</option>
+              <select class="form-select" name="cliente" id="cliente">
+                <option selected disabled value="">Seleccione el cliente</option>
                 {% for cliente in clientes %}
                   <option value="{{ cliente.id }}">{{ cliente.nombre }} {{ cliente.apellido }}</option>
                 {% endfor %}
               </select>
             </div>
+
             <div class="mb-3">
               <label for="tipo_pago" class="form-label">Tipo de pago:</label>
               <select class="form-select mb-3" name="tipo_pago" id="tipo_pago">
@@ -81,10 +83,4 @@
 
   <!-- enlace a mi script -->
   <script src="{% static 'js/templates/nueva_suscripcion.js' %}"></script>
-
-  <style>
-    .no-click {
-      pointer-events: none;
-    }
-  </style>
 {% endblock %}
