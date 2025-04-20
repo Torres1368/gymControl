@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-^vf9cb55x*a&lfc+jh4jqd)&3kzjyr-j+2tvet&(mq6ulspobi
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '192.168.100.10']
 
 
 # Application definition
@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'Aplicaciones.gymcontrol'
+    'Aplicaciones.gymcontrol',
+    'pwa',
 ]
 
 MIDDLEWARE = [
@@ -130,3 +131,27 @@ STATICFILES_DIRS=(os.path.join(BASE_DIR,'static'),)
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+#Configuracion PWA
+PWA_APP_NAME = "Exquisitez Marinera"
+PWA_APP_DESCRIPTION = "App de restaurante Exquisitez Marinera"
+PWA_APP_THEME_COLOR = '#ffffff'  # Opcional, para la barra superiorde la pwa
+PWA_APP_DISPLAY = 'standalone'
+PWA_APP_ORIENTATION = 'portrait'
+PWA_APP_STATUS_BAR_COLOR = 'default'
+PWA_APP_START_URL = "/"
+PWA_APP_ICONS=[
+    {
+        "src": "/static/assets/img/login/logo.png",
+        "sizes": "192x192",
+    }
+]
+
+PWA_APP_SPLASH_SCREEN = [
+    {
+        'src': '/static/assets/img/login/logo.png',
+        'media': '(device-width: 640px) and (device-height: 1136px) and (-webkit-device-pixel-ratio: 2)'
+    }
+]
+PWA_APP_LANG = 'es'
