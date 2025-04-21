@@ -5,7 +5,10 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
     <title>IRON GYM | LOGIN</title>
+    <!-- Icono del sitio web -->
+    <link rel="shortcut icon" href="{% static 'img/login/usuario.png' %}" />
     <!-- link css file -->
     <link rel="stylesheet" href="{% static 'css/login.css' %}" />
     <!-- sweet alert -->
@@ -15,19 +18,19 @@
     <div class="wrapper">
       <div class="left">
         <center>
-          <img class="logo" src="{% static 'img/login/logo.png' %}" alt="LOGO" />
+          <img class="logo" src="{% static 'img/login/usuario.png' %}" alt="LOGO" />
         </center>
         <h2 class="welcome_text">Iniciar Sesión</h2>
 
         <form method="POST" class="form">
           {% csrf_token %}
           <h2 class="inp_name">Usuario*</h2>
-          <input class="input" name="username" type="text" placeholder="Enter your email" required /><br />
+          <input class="input" name="username" type="text" placeholder="Ingrese el usuario" required /><br />
 
           <h2 class="inp_name">Contraseña *</h2>
-          <input class="input" name="password" type="password" placeholder="Enter your password" required /><br />
+          <input class="input" name="password" type="password" placeholder="Ingrese la contraseña" required /><br />
 
-          <button type="submit" class="signin_btn">Sign In</button>
+          <button type="submit" class="signin_btn">Ingresar</button>
 
           {% if messages %}
             <script>
@@ -43,7 +46,7 @@
       </div>
 
       <div class="right">
-        <h2 class="title">SIGN IN TO<br />DASHBOARD</h2>
+        <h2 class="title text-center">Bienvenido a <br /> IronGym</h2>
       </div>
     </div>
   </body>

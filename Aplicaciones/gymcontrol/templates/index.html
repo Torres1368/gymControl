@@ -12,8 +12,8 @@
 
     <meta name="csrf-token" content="{{ csrf_token }}" />
 
-    <!-- Favicon -->
-    <link href="img/favicon.ico" rel="icon" />
+    <!-- Icono del sitio web -->
+    <link rel="shortcut icon" href="{% static 'img/login/usuario.png' %}" />
 
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -155,7 +155,7 @@
           <div class="nav-item dropdown">
             <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
               <i class="fa fa-bell me-lg-2"></i>
-              <span class="d-none d-lg-inline-flex">Notificatin</span>
+              <span class="d-none d-lg-inline-flex">Notificaciones</span>
             </a>
             <div class="dropdown-menu dropdown-menu-end bg-secondary border-0 rounded-0 rounded-bottom m-0">
               <a href="#" class="dropdown-item">
@@ -173,7 +173,7 @@
                 <small>15 minutes ago</small>
               </a>
               <hr class="dropdown-divider" />
-              <a href="#" class="dropdown-item text-center">See all notifications</a>
+              <a href="#" class="dropdown-item text-center">Marcar como leidas</a>
             </div>
           </div>
           <div class="nav-item dropdown">
