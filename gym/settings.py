@@ -50,9 +50,17 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'Aplicaciones.gymcontrol.middleware.ExpirarUnaVezAlDiaMiddleware', #para cambiar el estado de suscripcion
 ]
 
 ROOT_URLCONF = 'gym.urls'
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+    }
+}
+
 
 TEMPLATES = [
     {
@@ -65,6 +73,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'Aplicaciones.gymcontrol.context_processors.notificaciones_context',
             ],
         },
     },

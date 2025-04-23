@@ -58,7 +58,9 @@
               <label for="fecha_nacimiento" class="form-label">Fecha de nacimiento:</label>
               <input type="date" class="form-control text-white" id="fecha_nacimiento" name="fecha_nacimiento" />
             </div>
-            <div class="text-end">
+
+            <div class="d-flex justify-content-between">
+              <a href="{% url 'clientes' %}" class="btn btn-dark">Cancelar</a>
               <button type="submit" class="btn btn-primary">Guardar</button>
             </div>
           </div>

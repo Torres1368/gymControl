@@ -13,6 +13,8 @@
     <link rel="stylesheet" href="{% static 'css/login.css' %}" />
     <!-- sweet alert -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
   </head>
   <body>
     <div class="wrapper">
@@ -24,13 +26,16 @@
 
         <form method="POST" class="form">
           {% csrf_token %}
-          <h2 class="inp_name">Usuario*</h2>
+          <h2 class="inp_name"><i class='bx bx-user bx-tada'></i>
+            Usuario* </h2>
           <input class="input" name="username" type="text" placeholder="Ingrese el usuario" required /><br />
 
-          <h2 class="inp_name">Contraseña *</h2>
+          <h2 class="inp_name"><i class='bx bx-lock-alt bx-flashing'></i>
+            Contraseña *</h2>
           <input class="input" name="password" type="password" placeholder="Ingrese la contraseña" required /><br />
 
-          <button type="submit" class="signin_btn">Ingresar</button>
+          <button type="submit" class="signin_btn"><i class='bx bx-send bx-tada'></i>
+            Ingresar</button>
 
           {% if messages %}
             <script>
@@ -46,7 +51,7 @@
       </div>
 
       <div class="right">
-        <h2 class="title text-center">Bienvenido a <br /> IronGym</h2>
+        <h2 class="title text-center">Bienvenido al <br /> Sistema</h2>
       </div>
     </div>
   </body>

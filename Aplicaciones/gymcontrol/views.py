@@ -5,6 +5,8 @@ from decimal import Decimal
 from django.contrib.auth import authenticate, login
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
+from django.db.models import ProtectedError
+from datetime import date
 # Create your views here.
 def user_login(request):
     if request.method == 'POST':
@@ -61,6 +63,19 @@ def perfil_usuario(request):
 def index(request):
     return render(request,'index.html')
 
+def notificaciones_context(request):
+    suscripciones_vencidas = Suscripcion.objects.filter(fecha_fin__lt=date.today(), estado='activa')
+    notificaciones = []
+
+    for s in suscripciones_vencidas:
+        notificaciones.append({
+            'cliente': f"{s.cliente.nombre} {s.cliente.apellido}",
+            'mensaje': f"La suscripción de {s.cliente.nombre} {s.cliente.apellido} ha vencido",
+            'fecha': s.fecha_fin,
+        })
+
+    return {'notificaciones': notificaciones}
+
 def clientes(request):
     clientes=Cliente.objects.all()
     return render(request,'cliente/cliente.html',{'clientes':clientes ,'navbar': 'clientes'})
@@ -115,11 +130,15 @@ def procesarinformacionCliente(request):
 
 
 
-def eliminar_cliente(request,id):
-    clienteEliminar=Cliente.objects.get(id=id)
-    clienteEliminar.delete()
-    messages.success(request, 'Cliente eliminado exitosamente')
+def eliminar_cliente(request, id):
+    clienteEliminar = get_object_or_404(Cliente, id=id)
+    try:
+        clienteEliminar.delete()
+        messages.success(request, 'Cliente eliminado exitosamente')
+    except ProtectedError:
+        messages.error(request, 'No se puede eliminar este cliente porque está relacionado con otros registros.')
     return redirect('/clientes')
+
 
 def suscripciones(request):
     clientes=Cliente.objects.all()
@@ -132,19 +151,38 @@ def nueva_suscripcion(request):
     return render(request,'suscripcion/nueva_suscripcion.html',{'clientes':clientes, 'tiposPagos':tiposPagos})
 
 
+from django.shortcuts import redirect, render
+from django.contrib import messages
+from .models import Cliente, TipoPago, Suscripcion
+
 def guardar_suscripcion(request):
     if request.method == 'POST':
-        cliente_id = request.POST["cliente"]
-        tipo_pago_id = request.POST["tipo_pago"]
-        fecha_inicio = request.POST.get("fecha_inicio")
-        fecha_fin = request.POST.get("fecha_fin")
-        pago_inicial = request.POST["pago_inicial"].replace(",", ".")
-        total_pagar = request.POST["total_pagar"].replace(",", ".")
-        estado = request.POST["estado"]
-        
+        cliente_id    = request.POST["cliente"]
+        tipo_pago_id  = request.POST["tipo_pago"]
+        fecha_inicio  = request.POST.get("fecha_inicio")
+        fecha_fin     = request.POST.get("fecha_fin")
+        pago_inicial  = request.POST["pago_inicial"].replace(",", ".")
+        total_pagar   = request.POST["total_pagar"].replace(",", ".")
+        estado        = request.POST["estado"]
+
         cliente = Cliente.objects.get(id=cliente_id)
+        pendiente = Suscripcion.objects.filter(
+            cliente=cliente,
+            estado='pendiente'
+        ).exists()
+        if pendiente:
+            messages.error(
+                request,
+                'No se puede crear la suscripción: el cliente tiene un pago pendiente.'
+            )
+            # Puedes redirigir a la lista de suscripciones
+            return redirect('/nueva_suscripcion')
+            # o volver a renderizar el formulario con los datos
+
+
+        # Si no hay pendiente, seguimos con la creación
         tipo_pago = TipoPago.objects.get(id=tipo_pago_id)
-        suscripcion = Suscripcion.objects.create(
+        Suscripcion.objects.create(
             cliente=cliente,
             tipo_pago=tipo_pago,
             fecha_inicio=fecha_inicio,
@@ -153,36 +191,25 @@ def guardar_suscripcion(request):
             total_pagar=total_pagar,
             estado=estado
         )
-        messages.success(request, 'Suscripcion guardada exitosamente')
-        return redirect('/suscripciones') 
-    
+        messages.success(request, 'Suscripción guardada exitosamente')
+        return redirect('/suscripciones')
 
-def editar_suscripcion(request, id):
-    suscripciones=Suscripcion.objects.get(id=id)
-    clientes=Cliente.objects.all()
-    tiposPagos=TipoPago.objects.all()
-        
-
-    
-    messages.success(request, 'Cliente guardado exitosamente')
-    return redirect('/clientes')
-
-def editar_suscripcion(request, id):
-    suscripciones=Suscripcion.objects.get(id=id)
-    return render(request, 'suscripcion-/editar_suscripcion.html', {'suscripciones': suscripciones})
-
-def procesarinformacionSuscripcion(request):
-    return redirect('/clientes')
+    # Si no es POST, mostrar tu formulario (opcional)
+    return render(request, 'suscripciones/form.html', {
+        'clientes': Cliente.objects.all(),
+        'tipos_pago': TipoPago.objects.all()
+    })
 
 
 
-def eliminar_suscripcion(request,id):
-    suscripcionEliminar=Suscripcion.objects.get(id=id)
-    suscripcionEliminar.delete()
-    messages.success(request, 'Cliente eliminado exitosamente')
-    return redirect('/suscripciones')
-
-
+def eliminar_suscripcion(request, id):
+    suscripcionEliminar = get_object_or_404(Suscripcion, id=id)
+    try:
+        suscripcionEliminar.delete()
+        messages.success(request, 'Suscripción eliminada exitosamente')
+    except ProtectedError:
+        messages.error(request, 'No se puede eliminar esta suscripción porque está relacionada con otros registros.')
+    return redirect('/suscripciones') 
 
 
 def registrar_abono(request, suscripcion_id):

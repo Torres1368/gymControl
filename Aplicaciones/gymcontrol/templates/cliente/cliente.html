@@ -10,7 +10,7 @@
       <div class="col-md-12">
         <!-- Botón agregar cliente -->
         <div class="d-flex justify-content-end my-3">
-          <a href="{% url 'nuevo_cliente' %}" class="btn btn-outline-danger m-2"><i class="fa-solid fa-user-plus"></i> Agregar Nuevo Cliente</a>
+          <a href="{% url 'nuevo_cliente' %}" class="btn btn-outline-danger m-2"><i class='bx bx-user-plus bx-tada'></i> Agregar Nuevo Cliente</a>
         </div>
 
         <!-- Tabla de clientes -->
@@ -43,6 +43,7 @@
                           Sin foto
                         {% endif %}
                       </td>
+              
                       <td class="text-center">
                         <a href="{% url 'editar_cliente' cliente.id %}" class="btn btn-warning btn-sm"><i class="fa-solid fa-pen-to-square"></i> Editar</a>
                         <a href="javascript:void(0)" onclick="eliminarCliente('/eliminar_cliente/{{ cliente.id }}');" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i> Eliminar</a>

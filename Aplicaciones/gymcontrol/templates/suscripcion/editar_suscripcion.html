@@ -3,7 +3,7 @@
   {% load static %}
   
   <div class="bg-secondary rounded col-11 mx-auto d-none">
-    <h2 class="text-center text-white fw-bold">Lista de clientes</h2>
+    <h2 class="text-center text-white fw-bold">Lista de suscripciones</h2>
   </div>
   <form action="/procesarinformacionCliente/" method="post" enctype="multipart/form-data" id="frm_cliente">
     {% csrf_token %}
@@ -11,7 +11,7 @@
       <div class="row g-4">
         <div class="col-sm-12 col-xl-6">
           <div class="bg-secondary rounded h-100 p-4">
-            <h6 class="mb-4">Agregar cliente</h6>
+            <h6 class="mb-4">Editar Suscripcion</h6>
 
             <input type="hidden" name="id" value="{{ cliente.id }}" />
 

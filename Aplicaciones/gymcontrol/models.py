@@ -40,10 +40,10 @@ class TipoPago(models.Model):
 
 class Suscripcion(models.Model):
     id = models.AutoField(primary_key=True)
-    cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
+    cliente = models.ForeignKey(Cliente, on_delete=models.PROTECT)
     ESTADO_CHOICES = [('activa', 'Activa'),('vencida', 'Vencida'),('pendiente', 'Pendiente'),] #add por ahora 
     estado = models.CharField(max_length=10, choices=ESTADO_CHOICES)#add por ahora
-    tipo_pago = models.ForeignKey(TipoPago, on_delete=models.CASCADE)
+    tipo_pago = models.ForeignKey(TipoPago, on_delete=models.PROTECT)
     pago_inicial=models.DecimalField(max_digits=10, decimal_places=2)
     total_pagar = models.DecimalField(max_digits=10, decimal_places=2)
     fecha_inicio = models.DateField()
@@ -57,7 +57,7 @@ class Suscripcion(models.Model):
 
 class Abono(models.Model):
     id = models.AutoField(primary_key=True)
-    suscripcion = models.ForeignKey(Suscripcion, on_delete=models.CASCADE)
+    suscripcion = models.ForeignKey(Suscripcion, on_delete=models.PROTECT)
     monto_abonado = models.DecimalField(max_digits=10, decimal_places=2)
     fecha = models.DateField()
     fecha_registro = models.DateTimeField(auto_now_add=True)
@@ -67,4 +67,11 @@ class Abono(models.Model):
         return f"{self.suscripcion.cliente.nombre} {self.suscripcion.cliente.apellido} - {self.fecha}"
 
 
+class Notificacion(models.Model):
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    mensaje = models.TextField()
+    fecha = models.DateTimeField(auto_now_add=True)
+    leida = models.BooleanField(default=False)
 
+    def __str__(self):
+        return f"{self.mensaje[:30]}..."

@@ -4,8 +4,8 @@
     <!-- Archivo de mi jquery validate form -->
     <script src="{% static 'js/templates/validate_cliente.js' %}"></script>
     
-  <div class="bg-secondary rounded col-11 mx-auto d-none">
-    <h2 class="text-center text-white fw-bold">Lista de clientes</h2>
+  <div class="bg-secondary rounded col-11 mx-auto ">
+    <h2 class="text-center text-white fw-bold">Editar cliente {{cliente.nombre}} {{cliente.apellido}}</h2>
   </div>
   <form action="/procesarinformacionCliente/" method="post" enctype="multipart/form-data" id="frm_cliente">
     {% csrf_token %}
@@ -13,7 +13,8 @@
       <div class="row g-4">
         <div class="col-sm-12 col-xl-6">
           <div class="bg-secondary rounded h-100 p-4">
-            <h6 class="mb-4">Agregar cliente</h6>
+            <h6 class="mb-4">Editar  cliente</h6>
+            
 
             <input type="hidden" name="id" value="{{ cliente.id }}" />
 
@@ -61,8 +62,9 @@
               <label for="fecha_nacimiento" class="form-label">Fecha de nacimiento:</label>
               <input type="date" class="form-control" id="fecha_nacimiento"  value="{{ cliente.fecha_nacimiento|date:'Y-m-d' }}" name="fecha_nacimiento" />
             </div>
-            <div class="text-end">
-              <button type="submit" class="btn btn-primary">Guardar</button>
+            <div class="d-flex justify-content-between">
+              <a href="{% url 'clientes' %}" class="btn btn-dark">Cancelar</a>
+              <button type="submit" class="btn btn-warning ">Actualizar</button>
             </div>
           </div>
         </div>

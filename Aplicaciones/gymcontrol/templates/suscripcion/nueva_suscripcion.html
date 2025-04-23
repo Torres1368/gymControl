@@ -72,7 +72,8 @@
               <label for="fecha_fin" class="form-label">Fecha de fin:</label>
               <input type="date" class="form-control bg-dark" id="fecha_fin" name="fecha_fin" readonly />
             </div>
-            <div class="text-end">
+            <div class="d-flex justify-content-between">
+              <a href="{% url 'suscripciones' %}" class="btn btn-dark">Cancelar</a>
               <button type="submit" class="btn btn-primary">Guardar</button>
             </div>
           </div>

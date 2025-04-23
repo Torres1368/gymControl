@@ -10,7 +10,7 @@
       <div class="col-md-12">
         <!-- Botón agregar cliente -->
         <div class="d-flex justify-content-end my-3">
-          <a href="{% url 'nueva_suscripcion' %}" class="btn btn-outline-danger m-2"><i class="fa fa-plus-circle me-1"></i> Agregar Nueva Suscripción</a>
+          <a href="{% url 'nueva_suscripcion' %}" class="btn btn-outline-danger m-2"><i class='bx bx-wallet bx-tada'></i> Agregar Nueva Suscripción</a>
         </div>
 
         <!-- Tabla de clientes -->
@@ -41,8 +41,9 @@
                       <td>{{ suscripcion.fecha_fin }}</td>
                       <td class="text-center">
                         <a href="#" class="btn btn-success btn-sm" title="abonar este cliente" data-bs-toggle="modal" data-bs-target="#abonarModal{{ suscripcion.id }}"><i class="fa-solid fa-money-bill-wave"></i> Abonar</a>
-                        <a href="javascript:void(0)" onclick="eliminarSuscripcion('/eliminar_suscripcion/{{ suscripcion.id }}');" title="Eliminar registro" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i>Eliminar</a>
-                      </td>
+                        <a href="javascript:void(0)" onclick="eliminarSuscripcion('/eliminar_suscripcion/{{ suscripcion.id }}');" title="Eliminar registro" class="btn btn-danger btn-sm">
+                          <i class="fa-solid fa-trash"></i>Eliminar
+                        </a>                      </td>
                     </tr>
 
                     <!-- Modal para el abono -->
