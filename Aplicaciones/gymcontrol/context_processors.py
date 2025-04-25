@@ -1,15 +1,9 @@
-from datetime import date
-from .models import Suscripcion
+# gymcontrol/context_processors.py
+
+
+from Aplicaciones.gymcontrol.models import Notificacion
+
 
 def notificaciones_context(request):
-    suscripciones_vencidas = Suscripcion.objects.filter(fecha_fin__lt=date.today())
-    notificaciones = []
-
-    for s in suscripciones_vencidas:
-        notificaciones.append({
-            'cliente': f"{s.cliente.nombre} {s.cliente.apellido}",
-            'mensaje': f"La suscripción de {s.cliente.nombre} {s.cliente.apellido} ha vencido",
-            'fecha': s.fecha_fin,
-        })
-
-    return {'notificaciones': notificaciones}
+    notis = Notificacion.objects.filter(leida=False).order_by('-fecha')[:5]
+    return {'notificaciones': notis}

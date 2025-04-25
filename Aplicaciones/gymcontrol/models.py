@@ -68,7 +68,7 @@ class Abono(models.Model):
 
 
 class Notificacion(models.Model):
-    usuario = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
     mensaje = models.TextField()
     fecha = models.DateTimeField(auto_now_add=True)
     leida = models.BooleanField(default=False)

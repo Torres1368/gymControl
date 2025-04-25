@@ -7,6 +7,9 @@ from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.db.models import ProtectedError
 from datetime import date
+from django.shortcuts import redirect, render
+from django.contrib import messages
+from .models import Cliente, TipoPago, Suscripcion
 # Create your views here.
 def user_login(request):
     if request.method == 'POST':
@@ -60,29 +63,37 @@ def perfil_usuario(request):
         'profile': profile
     })
 
+@login_required
 def index(request):
     return render(request,'index.html')
 
-def notificaciones_context(request):
-    suscripciones_vencidas = Suscripcion.objects.filter(fecha_fin__lt=date.today(), estado='activa')
-    notificaciones = []
+@login_required
+def notificaciones(request):
+    # Obtener todas las notificaciones (leídas y no leídas)
+    todas_notificaciones = Notificacion.objects.all().order_by('-fecha')
+    return render(request, 'notificacion/notificacion.html', {'todas_notificaciones': todas_notificaciones, 'navbar': 'notificaciones'})
 
-    for s in suscripciones_vencidas:
-        notificaciones.append({
-            'cliente': f"{s.cliente.nombre} {s.cliente.apellido}",
-            'mensaje': f"La suscripción de {s.cliente.nombre} {s.cliente.apellido} ha vencido",
-            'fecha': s.fecha_fin,
-        })
 
-    return {'notificaciones': notificaciones}
+def marcar_leida(request, pk):
+    n = get_object_or_404(Notificacion, pk=pk)
+    n.leida = True
+    n.save()
+    return redirect(request.META.get('HTTP_REFERER', 'index'))
 
+def marcar_todas_leidas(request):
+    Notificacion.objects.filter(leida=False).update(leida=True)
+    return redirect(request.META.get('HTTP_REFERER', 'index'))
+
+@login_required
 def clientes(request):
     clientes=Cliente.objects.all()
     return render(request,'cliente/cliente.html',{'clientes':clientes ,'navbar': 'clientes'})
 
+@login_required
 def nuevo_cliente(request):
     return render(request,'cliente/nuevo_cliente.html')
 
+@login_required
 def guardar_cliente(request):
     if request.method == 'POST':
         nombre=request.POST["nombre"]
@@ -101,6 +112,7 @@ def guardar_cliente(request):
         messages.success(request, 'Cliente guardado exitosamente')
         return redirect('/clientes')
 
+@login_required
 def editar_cliente(request, id):
     cliente=Cliente.objects.get(id=id)
     return render(request, 'cliente/editar_cliente.html', {'cliente': cliente})
@@ -129,7 +141,7 @@ def procesarinformacionCliente(request):
     return redirect('/clientes')
 
 
-
+@login_required
 def eliminar_cliente(request, id):
     clienteEliminar = get_object_or_404(Cliente, id=id)
     try:
@@ -139,22 +151,21 @@ def eliminar_cliente(request, id):
         messages.error(request, 'No se puede eliminar este cliente porque está relacionado con otros registros.')
     return redirect('/clientes')
 
-
+@login_required
 def suscripciones(request):
     clientes=Cliente.objects.all()
     suscripciones = Suscripcion.objects.all()
     return render(request,'suscripcion/suscripcion.html',{'clientes':clientes ,'suscripciones':suscripciones, 'navbar': 'suscripciones'})
 
+@login_required
 def nueva_suscripcion(request):
     clientes=Cliente.objects.all()
     tiposPagos=TipoPago.objects.all()
     return render(request,'suscripcion/nueva_suscripcion.html',{'clientes':clientes, 'tiposPagos':tiposPagos})
 
 
-from django.shortcuts import redirect, render
-from django.contrib import messages
-from .models import Cliente, TipoPago, Suscripcion
 
+@login_required
 def guardar_suscripcion(request):
     if request.method == 'POST':
         cliente_id    = request.POST["cliente"]
@@ -201,7 +212,7 @@ def guardar_suscripcion(request):
     })
 
 
-
+@login_required
 def eliminar_suscripcion(request, id):
     suscripcionEliminar = get_object_or_404(Suscripcion, id=id)
     try:
@@ -211,7 +222,7 @@ def eliminar_suscripcion(request, id):
         messages.error(request, 'No se puede eliminar esta suscripción porque está relacionada con otros registros.')
     return redirect('/suscripciones') 
 
-
+@login_required
 def registrar_abono(request, suscripcion_id):
     # Obtén la suscripción correspondiente
     suscripcion = Suscripcion.objects.get(id=suscripcion_id)
@@ -248,13 +259,15 @@ def registrar_abono(request, suscripcion_id):
     messages.success(request, 'El abono ha sido registrado exitosamente')    
     return redirect('/suscripciones')  # Puedes redirigir a cualquier vista que necesites 
 
+@login_required
 def abonos(request):
     abonos = Abono.objects.select_related('suscripcion').all()
     return render(request, 'abono/abono.html', {
         'abonos': abonos,
         'navbar': 'abonos'
     })
-    
+   
+@login_required    
 def eliminar_abono(request, abono_id):
     abono = get_object_or_404(Abono, id=abono_id)
     suscripcion = abono.suscripcion

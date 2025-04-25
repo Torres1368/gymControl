@@ -157,24 +157,60 @@
           </div>
           <div class="nav-item dropdown">
             <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-              <i class="fa fa-bell me-lg-2"></i>
+              <i class="fa fa-bell me-lg-2 position-relative" style="font-size: 1.2rem;">
+                {% if notificaciones|length > 0 %}
+                  <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                    {{ notificaciones|length }}
+                  </span>
+                {% endif %}
+              </i>
               <span class="d-none d-lg-inline-flex">Notificaciones</span>
             </a>
-            <div class="dropdown-menu dropdown-menu-end bg-secondary border-0 rounded-0 rounded-bottom m-0">
+            
+            <div class="dropdown-menu dropdown-menu-end bg-secondary border-0 rounded-0 rounded-bottom m-0 p-2"
+                 style="max-width: 620px; max-height: 400px; overflow-y: auto;">
+                 
               {% if notificaciones %}
                 {% for n in notificaciones %}
-                  <a href="#" class="dropdown-item">
-                    <h6 class="fw-normal mb-0">{{ n.mensaje }}</h6>
-                    <small>Venció el {{ n.fecha }}</small>
+                  <a href="{% url 'marcar_leida' n.pk %}" class="dropdown-item">
+                    <div class="d-flex justify-content-between align-items-start">
+                      <div class="d-flex align-items-start">
+                        <!-- Foto de cliente o imagen por defecto -->
+                        <img src="{% if n.cliente.foto %}{{ n.cliente.foto.url }}{% else %}{% static 'img/usuario/usuario.png' %}{% endif %}" 
+                             alt="Foto de usuario" 
+                             class="rounded-circle me-2" 
+                             style="width: 30px; height: 30px; object-fit: cover;">
+          
+                        <div class="text-wrap w-100">
+                          <h6 class="fw-normal mb-0">{{ n.mensaje }}</h6>
+                          <div class="small text-muted">{{ n.cuerpo }}</div>
+                          <small class="text-light">{{ n.fecha|date:"d M Y H:i" }}</small>
+                        </div>
+                      </div>
+          
+                      {% if not n.leida %}
+                        <div>
+                          <a href="{% url 'marcar_leida' n.pk %}" class="text-decoration-none text-primary">
+                            <i class="fa fa-times"></i>
+                          </a>
+                        </div>
+                      {% endif %}
+                    </div>
                   </a>
                   <hr class="dropdown-divider" />
                 {% endfor %}
+                
+                <a href="{% url 'marcar_todas_leidas' %}" class="dropdown-item text-center btn btn-danger text-white">Marcar todas como leídas</a>
               {% else %}
-                <a href="#" class="dropdown-item text-center">No hay notificaciones nuevas</a>
+                <a href="#" class="dropdown-item text-center">No hay notificaciones</a>
               {% endif %}
-              <a href="#" class="dropdown-item text-center">Marcar como leídas</a>
+              
+              <a href="{% url 'notificaciones' %}" class="dropdown-item mt-2 text-center btn btn-success text-white ">Ver todas las notificaciones</a>
             </div>
           </div>
+          
+          
+          
           
           <div class="nav-item dropdown">
             <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">

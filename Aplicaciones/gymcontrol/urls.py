@@ -20,6 +20,10 @@ urlpatterns = [
     path('registrar_abono/<int:suscripcion_id>/', views.registrar_abono, name='registrar_abono'),
     path('abonos/', views.abonos, name='abonos'),
     path('eliminar_abono/<int:abono_id>/', views.eliminar_abono, name='eliminar_abono'),
+    
+    path('notificaciones/', views.notificaciones, name='notificaciones'),
+    path('noti/<int:pk>/leida/', views.marcar_leida, name='marcar_leida'),
+    path('noti/todas/leidas/', views.marcar_todas_leidas, name='marcar_todas_leidas'),
 
 
 ]
