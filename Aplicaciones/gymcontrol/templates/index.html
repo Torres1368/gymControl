@@ -97,7 +97,7 @@
           </div>
         </div>
         <div class="navbar-nav w-100">
-          <a href="#" class="nav-item nav-link"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
+          <a href="{% url 'dashboard' %}" class="nav-item nav-link {% if navbar == 'dashboard' %}active{% endif %}"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
           <a href="{% url 'clientes' %}" class="nav-item nav-link {% if navbar == 'clientes' %}active{% endif %}"><i class="fa-solid fa-users"></i>  Clientes</a>
           <a href="{% url 'suscripciones' %}" class="nav-item nav-link {% if navbar == 'suscripciones' %}active{% endif %}"><i class="fa-solid fa-medal"></i>  Suscripciones</a>
           <a href="{% url 'abonos' %}" class="nav-item nav-link {% if navbar == 'abonos' %}active{% endif %}"><i class="fa-solid fa-money-check-dollar"></i>  Registro Abonos</a>

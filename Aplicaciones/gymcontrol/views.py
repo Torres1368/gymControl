@@ -68,6 +68,10 @@ def index(request):
     return render(request,'index.html')
 
 @login_required
+def dashboard(request):
+    return render(request,'dashboard/dashboard.html',{'clientes':clientes ,'navbar': 'dashboard'})
+
+@login_required
 def notificaciones(request):
     # Obtener todas las notificaciones (leídas y no leídas)
     todas_notificaciones = Notificacion.objects.all().order_by('-fecha')
