@@ -25,8 +25,9 @@
                     <th>Nombre</th>
                     <th>Apellido</th>
                     <th>Estado</th>
-                    <th class="text-center">Fecha Inicio</th>
-                    <th class="text-center">Fecha Final</th>
+                    <th>Restante</th>
+                    <th class="text-center">Inicio</th>
+                    <th class="text-center">Final</th>
                     <th class="text-center">Acciones</th>
                   </tr>
                 </thead>
@@ -37,9 +38,10 @@
                       <td>{{ suscripcion.cliente.nombre }}</td>
                       <td>{{ suscripcion.cliente.apellido }}</td>
                       <td>{{ suscripcion.estado }}</td>
+                      <td>{{ suscripcion.total_pagar }}</td>
                       <td>{{ suscripcion.fecha_inicio }}</td>
                       <td>{{ suscripcion.fecha_fin }}</td>
-                      <td class="text-center">
+                      <td class="d-flex gap-2">
                         <a href="#" class="btn btn-success btn-sm" title="abonar este cliente" data-bs-toggle="modal" data-bs-target="#abonarModal{{ suscripcion.id }}"><i class="fa-solid fa-money-bill-wave"></i> Abonar</a>
                         <a href="javascript:void(0)" onclick="eliminarSuscripcion('/eliminar_suscripcion/{{ suscripcion.id }}');" title="Eliminar registro" class="btn btn-danger btn-sm">
                           <i class="fa-solid fa-trash"></i>Eliminar

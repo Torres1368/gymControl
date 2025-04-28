@@ -10,6 +10,7 @@ from datetime import date
 from django.shortcuts import redirect, render
 from django.contrib import messages
 from .models import Cliente, TipoPago, Suscripcion
+from django.db.models import Q
 # Create your views here.
 def user_login(request):
     if request.method == 'POST':
@@ -67,9 +68,89 @@ def perfil_usuario(request):
 def index(request):
     return render(request,'index.html')
 
+from django.utils import timezone
+from django.db.models import Sum
+from .models import Cliente, Abono
+
+
+import json
+from django.db.models import Sum, Count, Q
+from django.db.models.functions import TruncMonth
+from django.utils import timezone
+from django.contrib.auth.decorators import login_required
+from .models import Cliente, Suscripcion, Abono
+
 @login_required
 def dashboard(request):
-    return render(request,'dashboard/dashboard.html',{'clientes':clientes ,'navbar': 'dashboard'})
+    hoy = timezone.now().date()
+    primer_dia_mes = hoy.replace(day=1)
+
+    # — Tus métricas existentes —
+    total_clientes = Cliente.objects.count()
+    abonos_dia = Abono.objects.filter(fecha=hoy).aggregate(Sum('monto_abonado'))['monto_abonado__sum'] or 0
+    pagos_ini_dia = Suscripcion.objects.filter(fecha_registro__date=hoy).aggregate(Sum('pago_inicial'))['pago_inicial__sum'] or 0
+    ganancias_dia = abonos_dia + pagos_ini_dia
+
+    abonos_mes = Abono.objects.filter(fecha__gte=primer_dia_mes, fecha__lte=hoy).aggregate(Sum('monto_abonado'))['monto_abonado__sum'] or 0
+    pagos_ini_mes = Suscripcion.objects.filter(
+        fecha_registro__date__gte=primer_dia_mes,
+        fecha_registro__date__lte=hoy
+    ).aggregate(Sum('pago_inicial'))['pago_inicial__sum'] or 0
+    ganancias_mes = abonos_mes + pagos_ini_mes
+
+    total_clientes_activos = Suscripcion.objects.filter(
+        Q(estado='activa') | Q(estado='pendiente')
+    ).values('cliente').distinct().count()
+
+    # — Datos para barras: Ganancias mensuales (últimos 6 meses) —
+    # Abonos por mes
+    qs_abonos = (
+        Abono.objects
+        .filter(fecha__gte=primer_dia_mes - timezone.timedelta(days=180))
+        .annotate(mes=TruncMonth('fecha'))
+        .values('mes')
+        .annotate(total=Sum('monto_abonado'))
+    )
+    # Pagos iniciales por mes
+    qs_pagos = (
+        Suscripcion.objects
+        .filter(fecha_registro__date__gte=primer_dia_mes - timezone.timedelta(days=180))
+        .annotate(mes=TruncMonth('fecha_registro'))
+        .values('mes')
+        .annotate(total=Sum('pago_inicial'))
+    )
+    datos = {}
+    for q in qs_abonos:
+        key = q['mes'].strftime('%Y-%m')
+        datos.setdefault(key, 0)
+        datos[key] += float(q['total'] or 0)
+    for q in qs_pagos:
+        key = q['mes'].strftime('%Y-%m')
+        datos.setdefault(key, 0)
+        datos[key] += float(q['total'] or 0)
+    # Ordenamos las claves cronológicamente
+    meses = sorted(datos.keys())
+    ingresos = [datos[m] for m in meses]
+
+    # — Datos para pastel: Distribución de género —
+    qs_genero = Cliente.objects.values('genero').annotate(total=Count('id'))
+    etiquetas_genero = [g['genero'] for g in qs_genero]
+    datos_genero = [g['total'] for g in qs_genero]
+
+    context = {
+        'total_clientes': total_clientes,
+        'ganancias_dia': ganancias_dia,
+        'ganancias_mes': ganancias_mes,
+        'total_clientes_activos': total_clientes_activos,
+        # JSON para Chart.js
+        'labels_ganancias': json.dumps(meses),
+        'data_ganancias': json.dumps(ingresos),
+        'labels_genero': json.dumps(etiquetas_genero),
+        'data_genero': json.dumps(datos_genero),
+        'navbar': 'dashboard',
+    }
+    return render(request, 'dashboard/dashboard.html', context)
+
 
 @login_required
 def notificaciones(request):
